@@ -1,12 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"gosquash/api/internal/db"
 	"gosquash/api/internal/routes"
 	"gosquash/api/pkg/structs"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
@@ -40,8 +44,16 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 
 func main() {
 
+	// Load env variables
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	db.Init()
+
 	// sync database
-	db.DB.AutoMigrate(
+	err = db.DB.AutoMigrate(
 		&structs.User{},
 		&structs.Game{},
 		&structs.Player{},
@@ -58,5 +70,5 @@ func main() {
 	// Define routes
 	routes.Init(e)
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }
