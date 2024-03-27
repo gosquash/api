@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"gosquash/api/internal/db"
 	"gosquash/api/internal/routes"
+	"gosquash/api/internal/validator"
 	"gosquash/api/pkg/structs"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
@@ -28,18 +28,6 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 			"status":  code,
 		},
 	})
-}
-
-type CustomValidator struct {
-	validator *validator.Validate
-}
-
-func (cv *CustomValidator) Validate(i interface{}) error {
-	if err := cv.validator.Struct(i); err != nil {
-
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-	}
-	return nil
 }
 
 func main() {
@@ -62,7 +50,7 @@ func main() {
 	e := echo.New()
 
 	// Validator
-	e.Validator = &CustomValidator{validator: validator.New()}
+	e.Validator = validator.NewValidator()
 
 	// Custom error handler.
 	e.HTTPErrorHandler = customHTTPErrorHandler
