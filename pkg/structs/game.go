@@ -10,7 +10,7 @@ import (
 
 // Game is a struct that represents a game
 type Game struct {
-	Id      uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	Id      uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
 	Players []Player  `json:"players"`
 
 	AddedById uuid.UUID `json:"-"`
@@ -68,7 +68,7 @@ func (g *Game) getWinner() Player {
 
 // Player is a struct that represents a player in the game
 type Player struct {
-	Id uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	Id uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
 
 	GameId uuid.UUID `json:"-" gorm:"type:uuid"`
 	UserId uuid.UUID `json:"-" gorm:"type:uuid"`
