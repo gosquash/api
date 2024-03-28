@@ -44,6 +44,8 @@ func main() {
 	err = db.DB.AutoMigrate(
 		&structs.User{},
 		&structs.Game{},
+		&structs.Group{},
+		&structs.GroupMember{},
 		&structs.Player{},
 	)
 

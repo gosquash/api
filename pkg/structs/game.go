@@ -16,6 +16,9 @@ type Game struct {
 	AddedById uuid.UUID `json:"-"`
 	AddedBy   User      `json:"added_by" gorm:"foreignKey:AddedById"`
 
+	GroupId uuid.UUID `json:"-"`
+	Group   Group     `json:"-" gorm:"foreignKey:GroupId"`
+
 	CreatedAt time.Time      `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt time.Time      `json:"updatedAt" gorm:"autoUpdateTime"`
 	DeletedAt gorm.DeletedAt `json:"deletedAt" gorm:"autoDeleteTime"`
@@ -68,7 +71,7 @@ func (g *Game) getWinner() Player {
 
 // Player is a struct that represents a player in the game
 type Player struct {
-	Id uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
+	Id uuid.UUID `json:"-" gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
 
 	GameId uuid.UUID `json:"-" gorm:"type:uuid"`
 	UserId uuid.UUID `json:"-" gorm:"type:uuid"`

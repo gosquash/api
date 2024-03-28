@@ -20,10 +20,11 @@ func Authentication(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		user := structs.GetUserByToken(token)
-
-		if user != nil {
-			c.Set("user", user)
+		if user == nil {
+			return echo.NewHTTPError(401, "Unauthorized")
 		}
+
+		c.Set("user", user)
 
 		return next(c)
 	}

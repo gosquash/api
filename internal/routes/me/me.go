@@ -14,6 +14,8 @@ func Init(g *echo.Group) {
 
 	g.GET("", getMe)
 	g.PATCH("", updateMe)
+
+	g.GET("/groups", getGroups)
 }
 
 func getMe(c echo.Context) error {
@@ -43,4 +45,23 @@ func updateMe(c echo.Context) error {
 	}
 
 	return c.String(http.StatusAccepted, "")
+}
+
+func getGroups(c echo.Context) error {
+
+	user := c.Get("user").(*structs.User)
+
+	groups := user.GetGroups()
+
+	type Response struct {
+		Groups *[]structs.Group `json:"groups"`
+		Total  uint             `json:"total"`
+		Page   uint             `json:"page"`
+	}
+
+	return c.JSON(200, Response{
+		Groups: groups,
+		Total:  0,
+		Page:   0,
+	})
 }

@@ -13,7 +13,8 @@ type User struct {
 	Email    string    `json:"-" gorm:"unique"`
 	Password string    `json:"-"`
 
-	Players []Player `json:"-"`
+	Players      []Player      `json:"-"`
+	GroupMembers []GroupMember `json:"-"`
 }
 
 func GetUser(id any) *User {
@@ -32,8 +33,13 @@ func GetUser(id any) *User {
 	return &user
 }
 
-func (u *User) GetFriends() {
+func (u *User) GetGroups() *[]Group {
 
+	var groups []Group
+
+	db.DB.Model(&u).Association("Groups").Find(&groups)
+
+	return &groups
 }
 
 type UserClaims = jwt.RegisteredClaims

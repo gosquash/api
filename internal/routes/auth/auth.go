@@ -103,7 +103,7 @@ func createToken(userId string) string {
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, &structs.UserClaims{
 		Issuer:    "https://auth.gosquash.gg",
 		Subject:   userId,
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 365)),
 	})
 
 	token, err := jwtToken.SignedString([]byte("secret"))
