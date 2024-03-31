@@ -19,7 +19,7 @@ type Group struct {
 
 	CreatedAt time.Time      `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt time.Time      `json:"updatedAt" gorm:"autoUpdateTime"`
-	DeletedAt gorm.DeletedAt `json:"deletedAt" gorm:"autoDeleteTime"`
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"autoDeleteTime"`
 
 	Games []Game `json:"-"`
 }

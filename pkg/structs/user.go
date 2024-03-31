@@ -35,9 +35,18 @@ func GetUser(id any) *User {
 
 func (u *User) GetGroups() *[]Group {
 
+	var groupMembers []GroupMember
+
+	if result := db.DB.Preload("Group").Preload("Group.Creator").Find(&groupMembers, "user_id = ?", user.Id); result.Error != nil {
+		return nil
+	}
+
 	var groups []Group
 
-	db.DB.Model(&u).Association("Groups").Find(&groups)
+	for i, gm := range groupMembers {
+		groups = append(groups, gm.Group)
+		groups[i].Members = append(groups[i].Members, gm)
+	}
 
 	return &groups
 }

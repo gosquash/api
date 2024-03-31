@@ -47,6 +47,7 @@ func updateMe(c echo.Context) error {
 	return c.String(http.StatusAccepted, "")
 }
 
+// Get all groups that the user is a member of
 func getGroups(c echo.Context) error {
 
 	user := c.Get("user").(*structs.User)
@@ -55,13 +56,14 @@ func getGroups(c echo.Context) error {
 
 	type Response struct {
 		Groups *[]structs.Group `json:"groups"`
-		Total  uint             `json:"total"`
-		Page   uint             `json:"page"`
+
+		Total uint `json:"total"`
+		Page  uint `json:"page"`
 	}
 
 	return c.JSON(200, Response{
 		Groups: groups,
-		Total:  0,
-		Page:   0,
+		Total:  uint(len(*groups)),
+		Page:   1,
 	})
 }
