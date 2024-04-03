@@ -37,7 +37,7 @@ func (u *User) GetGroups() *[]Group {
 
 	var groupMembers []GroupMember
 
-	if result := db.DB.Preload("Group").Preload("Group.Creator").Find(&groupMembers, "user_id = ?", user.Id); result.Error != nil {
+	if result := db.DB.Preload("Group").Preload("Group.Creator").Find(&groupMembers, "user_id = ?", u.Id); result.Error != nil {
 		return nil
 	}
 
