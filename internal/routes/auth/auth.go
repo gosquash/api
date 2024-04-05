@@ -18,6 +18,22 @@ func Init(g *echo.Group) {
 	g.POST("/register", register)
 }
 
+type AuthError struct {
+	Message string `json:"message"`
+}
+
+type AuthErrorResponse struct {
+	Error *AuthError `json:"error"`
+}
+
+func NewAuthError(message string) *AuthErrorResponse {
+	return &AuthErrorResponse{
+		Error: &AuthError{
+			Message: message,
+		},
+	}
+}
+
 func login(c echo.Context) error {
 	var body struct {
 		Email    string `json:"email"`
@@ -33,17 +49,13 @@ func login(c echo.Context) error {
 	// Find user based on email
 	if result := db.DB.Where("email = ?", body.Email).First(&user); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return c.JSON(400, echo.Map{
-				"message": "Invalid credentials",
-			})
+			return c.JSON(400, NewAuthError("Invalid credentials"))
 		}
 	}
 
 	// Compare passwords
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err != nil {
-		return c.JSON(400, echo.Map{
-			"message": "Invalid credentials",
-		})
+		return c.JSON(400, NewAuthError("Invalid credentials"))
 	}
 
 	// Create JWT token
@@ -83,9 +95,7 @@ func register(c echo.Context) error {
 
 	if result := db.DB.Create(newUser); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
-			return c.JSON(400, echo.Map{
-				"message": "Email already exists",
-			})
+			return c.JSON(400, NewAuthError("Email already exists"))
 		}
 
 		return c.JSON(400, echo.Map{
