@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"os"
 
 	"github.com/gosquash/api/internal/db"
@@ -11,23 +9,16 @@ import (
 	"github.com/gosquash/api/pkg/errors"
 	"github.com/gosquash/api/pkg/structs"
 
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
 
-	// Load env variables
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
 	// Initialize database
 	db.Init()
 
 	// Sync database
-	err = db.DB.AutoMigrate(
+	db.DB.AutoMigrate(
 		&structs.User{},
 		&structs.Game{},
 		&structs.Group{},
@@ -46,5 +37,5 @@ func main() {
 	// Define routes
 	routes.Init(e)
 
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
 }
