@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"gosquash/api/internal/routes/auth"
-	"gosquash/api/internal/routes/games"
-	"gosquash/api/internal/routes/groups"
-	"gosquash/api/internal/routes/me"
-	"gosquash/api/internal/routes/users"
+	"github.com/gosquash/api/internal/routes/auth"
+	"github.com/gosquash/api/internal/routes/games"
+	"github.com/gosquash/api/internal/routes/groups"
+	"github.com/gosquash/api/internal/routes/me"
+	"github.com/gosquash/api/internal/routes/users"
 
 	"github.com/labstack/echo/v4"
 )

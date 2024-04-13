@@ -5,11 +5,11 @@ import (
 	"log"
 	"os"
 
-	"gosquash/api/internal/db"
-	"gosquash/api/internal/routes"
-	"gosquash/api/internal/validator"
-	"gosquash/api/pkg/errors"
-	"gosquash/api/pkg/structs"
+	"github.com/gosquash/api/internal/db"
+	"github.com/gosquash/api/internal/routes"
+	"github.com/gosquash/api/internal/validator"
+	"github.com/gosquash/api/pkg/errors"
+	"github.com/gosquash/api/pkg/structs"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"

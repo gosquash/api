@@ -1,7 +1,7 @@
 package structs
 
 import (
-	"gosquash/api/internal/db"
+	"github.com/gosquash/api/internal/db"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"

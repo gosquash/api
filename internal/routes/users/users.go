@@ -1,7 +1,7 @@
 package users
 
 import (
-	"gosquash/api/pkg/structs"
+	"github.com/gosquash/api/pkg/structs"
 
 	"github.com/labstack/echo/v4"
 )

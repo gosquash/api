@@ -3,9 +3,9 @@ package games
 import (
 	"net/http"
 
-	"gosquash/api/internal/db"
-	"gosquash/api/pkg/middleware"
-	"gosquash/api/pkg/structs"
+	"github.com/gosquash/api/internal/db"
+	"github.com/gosquash/api/pkg/middleware"
+	"github.com/gosquash/api/pkg/structs"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"

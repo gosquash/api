@@ -2,9 +2,10 @@ package auth
 
 import (
 	"errors"
-	"gosquash/api/internal/db"
-	"gosquash/api/pkg/structs"
 	"time"
+
+	"github.com/gosquash/api/internal/db"
+	"github.com/gosquash/api/pkg/structs"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"

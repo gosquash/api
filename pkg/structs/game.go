@@ -1,8 +1,9 @@
 package structs
 
 import (
-	"gosquash/api/internal/db"
 	"time"
+
+	"github.com/gosquash/api/internal/db"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
