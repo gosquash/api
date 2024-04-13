@@ -11,6 +11,11 @@ type HTTPError struct {
 	Status  int    `json:"status"`
 }
 
+var (
+	ErrNotAuthorized = echo.NewHTTPError(http.StatusUnauthorized, "Not authorized")
+	ErrNotFound      = echo.NewHTTPError(http.StatusNotFound, "Resource not found")
+)
+
 func ErrorHandler(err error, c echo.Context) {
 	code := http.StatusInternalServerError
 	var message string

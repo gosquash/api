@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/gosquash/api/pkg/errors"
 	"github.com/gosquash/api/pkg/structs"
 
 	"github.com/labstack/echo/v4"
@@ -19,21 +20,21 @@ func Authentication(next echo.HandlerFunc) echo.HandlerFunc {
 		// Check if Authorization header is present
 		token := req.Header.Get("Authorization")
 		if token == "" {
-			return echo.NewHTTPError(401, "Unauthorized")
+			return errors.ErrNotAuthorized
 		}
 
 		// Check if Authorization header is in the correct format
 		parts := strings.SplitN(strings.TrimSpace(token), " ", 2)
 		if len(parts) != 2 || parts[0] != "Bearer" {
 			log.Printf("Invalid Authorization Token format: %v", parts)
-			return echo.NewHTTPError(401, "Unauthorized")
+			return errors.ErrNotAuthorized
 		}
 
 		// Get user by token
 		userToken := parts[1]
 		user := structs.GetUserByToken(userToken)
 		if user == nil {
-			return echo.NewHTTPError(401, "Unauthorized")
+			return errors.ErrNotAuthorized
 		}
 
 		c.Set("user", user)
