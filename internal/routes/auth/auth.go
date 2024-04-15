@@ -96,13 +96,10 @@ func register(c echo.Context) error {
 
 	if result := db.DB.Create(newUser); result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
-			return c.JSON(400, NewAuthError("Email already exists"))
+			return echo.NewHTTPError(400, "Email already in use")
 		}
 
-		return c.JSON(400, echo.Map{
-			"message": "Error creating user",
-			"error":   result.Error.Error(),
-		})
+		return echo.NewHTTPError(400, "Failed to create user")
 	}
 
 	return c.String(204, "")

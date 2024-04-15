@@ -22,6 +22,7 @@ func Init(g *echo.Group) {
 	g.POST("/:id/games", createGroupGame)
 
 	g.GET("/:id/members", getGroupMembers)
+	g.POST("/:id/members", addGroupMember)
 }
 
 func createGroup(c echo.Context) error {
@@ -40,7 +41,7 @@ func createGroup(c echo.Context) error {
 		Name:      body.Name,
 		CreatorId: user.Id,
 		Members: []structs.GroupMember{
-			{UserId: user.Id},
+			{UserId: user.Id, State: structs.GroupMemberStateAdmin},
 		},
 	}
 
@@ -146,7 +147,6 @@ func createGroupGame(c echo.Context) error {
 func getGroupMembers(c echo.Context) error {
 
 	user := c.Get("user").(*structs.User)
-
 	group := structs.GetGroup(c.Param("id"))
 
 	if group == nil || !group.IsMember(user) {
@@ -165,4 +165,29 @@ func getGroupMembers(c echo.Context) error {
 	return c.JSON(200, response{
 		Members: group.GetMembers(),
 	})
+}
+
+// Add a member to a group
+func addGroupMember(c echo.Context) error {
+
+	user := c.Get("user").(*structs.User)
+	group := structs.GetGroup(c.Param("id"))
+
+	if group == nil || !group.CanEdit(user) {
+		return c.JSON(400, echo.Map{
+			"message": "You can not add members to this group",
+		})
+	}
+
+	var body struct {
+		UserId uuid.UUID `json:"user_id" validate:"required"`
+	}
+
+	if err := c.Bind(&body); err != nil {
+		return err
+	}
+
+	group.AddMember(body.UserId)
+
+	return c.String(201, "")
 }

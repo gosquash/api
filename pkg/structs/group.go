@@ -86,13 +86,29 @@ func (g *Group) GetGames() (*[]Game, uint) {
 	return &games, uint(len(games))
 }
 
-// Group Member
-type GroupMember struct {
-	// Permissions int `json:"permissions"`
+// Add member to group
+func (g *Group) AddMember(userId uuid.UUID) error {
+	member := GroupMember{
+		UserId: userId,
+		State:  GroupMemberStatePending,
+	}
 
-	GroupId uuid.UUID `json:"-" gorm:"type:uuid;primaryKey"`
-	Group   Group     `json:"-" gorm:"foreignKey:GroupId"`
+	if result := db.DB.Create(&member); result.Error != nil {
+		return result.Error
+	}
 
-	UserId uuid.UUID `json:"-" gorm:"type:uuid;primaryKey"`
-	User   User      `json:"user" gorm:"foreignKey:UserId"`
+	g.Members = append(g.Members, member)
+
+	g.Update()
+
+	return nil
+}
+
+// Update group in DB
+func (g *Group) Update() error {
+	if result := db.DB.Save(g); result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
